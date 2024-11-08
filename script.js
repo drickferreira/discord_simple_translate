@@ -3,6 +3,8 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.7
 // @description  Add a translate button with flag emoji below each Discord message to translate to the target language
+// @downloadURL  https://raw.githubusercontent.com/drickferreira/discord_simple_translate/refs/heads/main/script.js
+// @updateURL    https://raw.githubusercontent.com/drickferreira/discord_simple_translate/refs/heads/main/script.js
 // @match        https://discord.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
