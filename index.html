@@ -1,15 +1,133 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instalação do Discord Translate Button</title>
+    <title>Script de Tradução para Discord - Instalação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        select, button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .instructions {
+            text-align: left;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Discord Translate Button</h1>
-    <p>Clique para instalar o script</p>
-    <a href="https://raw.githubusercontent.com/drickferreira/discord_simple_translate/main/script.user.js">
-        <button>Instalar Script</button>
-    </a>
+
+<div class="container">
+    <h1>Discord Simple Translate - Instalação</h1>
+
+    <label for="languageSelect">Escolha seu idioma:</label>
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="ru">Русский</option>
+    </select>
+
+    <div id="instructions-en" class="instructions">
+        <h2>How to Install</h2>
+        <ol>
+            <li>Install the <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey extension</a> for your browser.</li>
+            <li>Go to the Tampermonkey settings and enable "Developer Mode" if required.</li>
+            <li>Click the button below to install the translation script for Discord.</li>
+        </ol>
+        <button onclick="installScript()">Install Script</button>
+    </div>
+
+    <div id="instructions-pt" class="instructions">
+        <h2>Como Instalar</h2>
+        <ol>
+            <li>Instale a extensão <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a> no seu navegador.</li>
+            <li>Vá para as configurações do Tampermonkey e ative o "Modo Desenvolvedor" se necessário.</li>
+            <li>Clique no botão abaixo para instalar o script de tradução para Discord.</li>
+        </ol>
+        <button onclick="installScript()">Instalar Script</button>
+    </div>
+
+    <div id="instructions-es" class="instructions">
+        <h2>Cómo Instalar</h2>
+        <ol>
+            <li>Instale la extensión <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a> en su navegador.</li>
+            <li>Vaya a la configuración de Tampermonkey y habilite el "Modo de Desarrollador" si es necesario.</li>
+            <li>Haga clic en el botón a continuación para instalar el script de traducción para Discord.</li>
+        </ol>
+        <button onclick="installScript()">Instalar Script</button>
+    </div>
+
+    <div id="instructions-fr" class="instructions">
+        <h2>Comment Installer</h2>
+        <ol>
+            <li>Installez l'extension <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a> pour votre navigateur.</li>
+            <li>Accédez aux paramètres de Tampermonkey et activez le "Mode Développeur" si nécessaire.</li>
+            <li>Cliquez sur le bouton ci-dessous pour installer le script de traduction pour Discord.</li>
+        </ol>
+        <button onclick="installScript()">Installer le Script</button>
+    </div>
+
+    <div id="instructions-ru" class="instructions">
+        <h2>Как установить</h2>
+        <ol>
+            <li>Установите расширение <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a> для вашего браузера.</li>
+            <li>Перейдите в настройки Tampermonkey и включите "Режим разработчика", если необходимо.</li>
+            <li>Нажмите на кнопку ниже, чтобы установить скрипт перевода для Discord.</li>
+        </ol>
+        <button onclick="installScript()">Установить Скрипт</button>
+    </div>
+</div>
+
+<script>
+    function changeLanguage() {
+        const selectedLanguage = document.getElementById("languageSelect").value;
+        document.querySelectorAll('.instructions').forEach((element) => {
+            element.style.display = 'none';
+        });
+        document.getElementById(`instructions-${selectedLanguage}`).style.display = 'block';
+    }
+    
+    function installScript() {
+        window.location.href = "https://raw.githubusercontent.com/drickferreira/discord_simple_translate/main/script.user.js";
+    }
+
+    // Inicializa o idioma padrão como português
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("languageSelect").value = "pt";
+        changeLanguage();
+    });
+</script>
+
 </body>
 </html>
