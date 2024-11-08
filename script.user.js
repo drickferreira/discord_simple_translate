@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Simple Translate
 // @namespace    http://tampermonkey.net/
-// @version      2.7
+// @version      2.8
 // @description  Add a translate button with flag emoji below each Discord message to translate to the target language
 // @downloadURL  https://raw.githubusercontent.com/drickferreira/discord_simple_translate/refs/heads/main/script.js
 // @updateURL    https://raw.githubusercontent.com/drickferreira/discord_simple_translate/refs/heads/main/script.js
@@ -30,6 +30,10 @@
     // Obter idioma salvo ou usar padrão "pt"
     let targetLanguage = GM_getValue("targetLanguage", "pt");
 
+    // Configuração de "Tamanho mínimo do texto"
+    const defaultMinTextSize = 10;
+    const minTextSize = GM_getValue("minTextSize", defaultMinTextSize);
+
     // Função para atualizar o idioma e a bandeira
     function updateLanguage(newLangCode) {
         if (languages[newLangCode]) {
@@ -47,6 +51,15 @@
         );
     });
 
+    // Comando para definir o tamanho mínimo do texto
+    GM_registerMenuCommand("Configurar Tamanho Mínimo do Texto", () => {
+        const newSize = prompt("Defina o tamanho mínimo do texto:", minTextSize);
+        if (newSize && !isNaN(newSize)) {
+            GM_setValue("minTextSize", parseInt(newSize, 10));
+            alert(`Tamanho mínimo do texto configurado para: ${newSize}`);
+        }
+    });
+
     // Função para traduzir o texto usando a API do Google Translate
     function translateText(text, callback) {
         GM_xmlhttpRequest({
@@ -56,7 +69,6 @@
                 try {
                     const result = JSON.parse(response.responseText);
                     if (result && result[0]) {
-                        // Juntar todas as partes da tradução (em caso de múltiplas linhas)
                         let translatedText = result[0].map(item => item[0]).join(' ');
                         callback(translatedText);
                     } else {
@@ -79,8 +91,15 @@
         messages.forEach(message => {
             // Verificando se o emoji já foi adicionado
             if (!message.querySelector('.translate-emoji')) {
+                
+                // Verifica o tamanho mínimo do texto (removendo caracteres não alfanuméricos)
+                const textContent = message.textContent || "";
+                const cleanedText = textContent.replace(/[^a-zA-Z0-9]/g, "");
+                if (cleanedText.length < minTextSize) {
+                    return; // Não cria o botão se o texto não atender ao tamanho mínimo
+                }
 
-                // Cria o emoji de tradução (Bandeira do Brasil)
+                // Cria o emoji de tradução
                 const translateEmoji = document.createElement('span');
                 translateEmoji.classList.add('emojiContainer_bae8cb', 'emojiContainerClickable_bae8cb', 'emojiJumbo_bae8cb', 'translate-emoji');
                 translateEmoji.setAttribute('aria-expanded', 'false');
@@ -93,42 +112,35 @@
                 emoji.setAttribute('alt', '🇧🇷');
                 emoji.setAttribute('draggable', 'false');
 
-                // CSS para ajustar o tamanho da imagem diretamente
                 emoji.style.width = '24px';
                 emoji.style.height = '24px';
 
                 translateEmoji.appendChild(emoji);
 
-                // CSS para ajuste do emoji e a quebra de linha
-                translateEmoji.style.display = 'block'; // Faz com que o emoji ocupe toda a linha
-                translateEmoji.style.marginTop = '10px'; // Espaço entre o texto e o emoji
-                translateEmoji.style.cursor = 'pointer'; // Adiciona o cursor de pointer no emoji
-                translateEmoji.style.clear = 'both'; // Garante que o emoji vai para a próxima linha
+                translateEmoji.style.display = 'block'; 
+                translateEmoji.style.marginTop = '10px'; 
+                translateEmoji.style.cursor = 'pointer'; 
+                translateEmoji.style.clear = 'both';
 
-                // Adiciona o evento de clique para o emoji de tradução
                 translateEmoji.addEventListener('click', () => {
                     translateText(message.textContent, translatedText => {
-                        // Cria um elemento para mostrar a tradução
                         const translationNode = document.createElement('div');
                         translationNode.style.fontSize = 'smaller';
                         translationNode.style.color = '#888';
                         translationNode.classList.add('translated-text');
                         translationNode.textContent = `${translatedText}`;
 
-                        // Adiciona a tradução abaixo da mensagem original
                         if (!message.querySelector('.translated-text')) {
                             message.appendChild(translationNode);
                         }
                     });
                 });
 
-                // Adiciona o emoji abaixo da mensagem original
                 message.appendChild(translateEmoji);
             }
         });
     }
 
-    // Função para observar o container de mensagens para adicionar o emoji em novas mensagens
     function observeMessages() {
         const chatContainer = document.querySelector('[id^="chat-messages"]');
         if (chatContainer) {
@@ -141,9 +153,6 @@
         }
     }
 
-    // Inicializa o observador
     observeMessages();
-
-    // Intervalo adicional para verificar mensagens periodicamente
     setInterval(addTranslateEmoji, 2000);
 })();
