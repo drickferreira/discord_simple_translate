@@ -94,7 +94,7 @@
                 
                 // Verifica o tamanho mínimo do texto (removendo caracteres não alfanuméricos)
                 const textContent = message.textContent || "";
-                const cleanedText = textContent.replace(/[^a-zA-Z0-9]/g, "");
+                const cleanedText = textContent.replace(/[\/\._\-+\)\(\*\|\\]/g, "");
                 if (cleanedText.length < minTextSize) {
                     return; // Não cria o botão se o texto não atender ao tamanho mínimo
                 }
