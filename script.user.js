@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Simple Translate
 // @namespace    http://tampermonkey.net/
-// @version      2.8
+// @version      2.9
 // @description  Add a translate button with flag emoji below each Discord message to translate to the target language
 // @downloadURL  https://raw.githubusercontent.com/drickferreira/discord_simple_translate/main/script.user.js
 // @updateURL    https://raw.githubusercontent.com/drickferreira/discord_simple_translate/main/script.user.js
@@ -86,12 +86,11 @@
 
     // Função para adicionar o emoji de tradução em cada mensagem
     function addTranslateEmoji() {
-        const messages = document.querySelectorAll('[id^="chat-messages"] .messageContent_f9f2ca');
+        const messages = document.querySelectorAll('.messageContent_c19a55');
 
         messages.forEach(message => {
             // Verificando se o emoji já foi adicionado
             if (!message.querySelector('.translate-emoji')) {
-                
                 // Verifica o tamanho mínimo do texto (removendo caracteres não alfanuméricos)
                 const textContent = message.textContent || "";
                 const cleanedText = textContent.replace(/[\/\._\-+\)\(\*\|\\]/g, "");
@@ -117,9 +116,9 @@
 
                 translateEmoji.appendChild(emoji);
 
-                translateEmoji.style.display = 'block'; 
-                translateEmoji.style.marginTop = '10px'; 
-                translateEmoji.style.cursor = 'pointer'; 
+                translateEmoji.style.display = 'block';
+                translateEmoji.style.marginTop = '10px';
+                translateEmoji.style.cursor = 'pointer';
                 translateEmoji.style.clear = 'both';
 
                 translateEmoji.addEventListener('click', () => {
